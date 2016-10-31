@@ -1,59 +1,122 @@
 @choosenFilesColor: #34495e;
 @mainBackgroundColor: #2c3e50;
 @fontFaces : Arial, sans-serif;
-//TODO MORE FONTS
-.imageDrop-label {
+body {
+  background-color: @mainBackgroundColor;
+}
+
+.imageDrop-mainContainer {
   display: block;
-  position: absolute;
+  position: static;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: @mainBackgroundColor;
   box-sizing: border-box;
-  cursor: pointer;
   font-family: @fontFaces;
+  z-index: 200;
+  &.imageSelected {
+    .imageDrop-label {
+      display: none;
+    }
+    .imageDrop-imgCont {
+      opacity: 1;
+    }
+  }
+  &.textFound {
+    .imageDrop-textFound {
+      display: block;
+    }
+  }
+}
 
-  .imageDrop-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.imageDrop-imgCont {
+  opacity: 0;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translate(0, -50%);
+  width: 80%;
+  max-width: 500px;
+  height: auto;
+  margin: auto;
+
+  .imageDrop-img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.imageDrop-textFound {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 300px;
+  max-height: 300px;
+  height: auto;
+  overflow: auto;
+  padding: 15px;
+  color: white;
+  background-color: #34495e;
+  font-family: @fontFaces;
+  font-weight: bold;
+  transform: translate(0, -50%);
+}
+
+.imageDrop-label {
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border: dashed 2px rgba(255, 255, 255, .3);
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  .imageDrop-explain {
+    display: block;
     opacity: 1;
-    transition: opacity 1s ease-in-out, color 1s ease;
     width: 600px;
-
     text-align: center;
     color: rgba(255, 255, 255, .3);
     font-weight: bold;
     font-size: 2em;
     font-family: inherit;
-  }
-  &:hover .imageDrop-text {
-    color: rgba(255, 255, 255, 1);
-  }
-  .imageDrop-text.hidden {
-    opacity: 0;
-  }
-  .imageDrop-imgCont {
-    display: none;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 80%;
-    height: auto;
-    &.active {
-      display: block;
-    }
-
-    .imageDrop-img {
-      width: 100%;
-      height: auto;
-    }
+    .noselect;
   }
 
+  &:hover {
+    border-color: rgba(255, 255, 255, 1);
+    .imageDrop-explain {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
   input[type=file] {
     display: none;
   }
+}
+
+.retryButton {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  transform: translate(-50%, -50%);
+  color: #34495e;
+  font-weight: bold;
+  font-family: @fontFaces;
+  background: transparent;
+  z-index: 200;
+  cursor: pointer;
+  font-size: 40px;
+  .noselect;
+  &:hover {
+    color: white;
+  }
+}
+
+.noselect {
+  user-select: none;
 }

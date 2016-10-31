@@ -1,28 +1,18 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
 
-function buildCmd(binary, inputFile, outputFile, language, psmValue, trainingDataDirectory) {
-    if (outputFile != "-") {
-        outputFile = "\"" + outputFile + "\"";
-    }
+var buildCmd = function (binary, inputFile, outputFile, language, psmValue, trainingDataDirectory) {
     var cmd = [binary, "\"" + inputFile + "\"", outputFile,
         " -l " + language,
         " -psm " + psmValue,
         " --tessdata-dir " + trainingDataDirectory];
     return cmd.join(' ');
-}
+};
 
-function runCmd(cmd) {
+var runCmd = function (cmd, cb) {
     console.log("Gonna run : " + cmd);
-    exec(cmd, function callback(error, stdout, stderr) {
-        if (error) {
-            throw error;
-        } else {
-            console.log("ERROR : " + stderr);
-            console.log(stdout);
-        }
-    });
-}
+    exec(cmd, cb);
+};
 
 var merge = function (defaults, options) {
     defaults = defaults || {};
@@ -71,20 +61,11 @@ module.exports = function (opts) {
         throw e;
     }
 
-    /**
-     * fs.js:101 Uncaught Error: ENOENT: no such file or directory,
-     * rename
-     * 'C:\Users\Dylan\Desktop\Dossier Privé Dylan\Images\Higgs exist.png' ->
-     * 'C:\Users\Dylan\WebstormProjects\electronTesseract\img\
-     * C:\Users\Dylan\Desktop\Dossier Privé Dylan\Images\Higgs exist.png'
-     */
-
     try {
         fs.accessSync(options.trainingDataDirectory, fs.F_OK);
     } catch (e) {
         throw e;
     }
-
 
     return {
 
@@ -92,14 +73,21 @@ module.exports = function (opts) {
             FR: 'fr',
             ENG: 'eng'
         },
-        getText: function (filepath, filename) {
-            var outputTextFile = options.textDirectory + filename + ".txt";
-            outputTextFile = "-"; //Test stdout
-            var imgPath = options.imageDirectory + filename;
-            fs.rename(filepath, imgPath);
-            var cmd = buildCmd(options.binaryPath, imgPath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
-            console.log(cmd);
-            runCmd(cmd);
+        getText: function (filepath, filename, cb) {
+            // Tesseract only output to a text file
+            var outputTextFile = options.textDirectory + filename;
+            outputTextFile = outputTextFile.replace(new RegExp(" ", 'g'), "_");
+            var tmpImgPath = options.imageDirectory + filename;
+            fs.createReadStream(filepath).pipe(fs.createWriteStream(tmpImgPath));
+            var cmd = buildCmd(options.binaryPath, tmpImgPath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
+            runCmd(cmd, function callback(error, stdout, stderr) {
+                if (error) {
+                    throw error;
+                } else {
+                    fs.unlink(tmpImgPath);
+                    cb(fs.readFileSync(outputTextFile + ".txt", 'utf8'));
+                }
+            });
         }
     };
 };
