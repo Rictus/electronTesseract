@@ -1,6 +1,6 @@
 if (typeof require === "function") {
     //NodeJS
-    var runner = require('./runner')();
+    var runner = require('./ImageOCR')();
 } else {
     //Classic HTML
     console.info("The on-browser feature is not available yet.");
@@ -14,6 +14,7 @@ var domElements = {
     img: document.getElementsByClassName('imageDrop-img')[0],
     elementExample: document.createElement('span'),
     retryButton: document.getElementsByClassName('retryButton')[0],
+    launchButton: document.getElementsByClassName('launchButton')[0],
     putImage: function (path) {
         this.img.setAttribute('src', path);
         this.container.classList.add("imageSelected");
@@ -25,7 +26,6 @@ var domElements = {
         } else {
             console.log("No text found.");
         }
-        this.unsetLoading();
     },
     setLoading: function () {
         this.container.classList.add("loading");
@@ -38,16 +38,21 @@ var domElements = {
         this.img.setAttribute('src', '');
         this.container.classList.remove("imageSelected");
         this.container.classList.remove("textFound");
+    },
+    launch: function () {
+        if (domElements.input.files.length > 0) {
+            var file = domElements.input.files[0];
+            domElements.putImage(file.path);
+            domElements.setLoading();
+            runner.getText(file.path, file.name, function (txt) {
+                this.unsetLoading();
+                domElements.putText(txt);
+            });
+        } else {
+            // TODO Show error to user
+            console.error("No file selected.");
+        }
     }
-};
-
-var processFile = function (file) {
-    console.log(file);
-    domElements.putImage(file.path);
-    domElements.setLoading();
-    runner.getText(file.path, file.name, function (txt) {
-        domElements.putText(txt);
-    });
 };
 
 var initListeners = function () {
@@ -57,14 +62,16 @@ var initListeners = function () {
         console.info("The drag and drop feature is not supported.");
     }
 
+    domElements.launchButton.addEventListener('click', function () {
+        domElements.launch();
+    });
     domElements.retryButton.addEventListener('click', function () {
         domElements.retry();
     });
-
     domElements.input.addEventListener('change', function () {
-        if (domElements.input.files.length > 0) {
-            processFile(domElements.input.files[0]);
-        }
+        var file = domElements.input.files[0];
+        console.log(file);
+        domElements.putImage(file.path);
     });
 };
 

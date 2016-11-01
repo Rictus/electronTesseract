@@ -10,8 +10,13 @@ var buildCmd = function (binary, inputFile, outputFile, language, psmValue, trai
 };
 
 var runCmd = function (cmd, cb) {
-    console.log("Gonna run : " + cmd);
-    exec(cmd, cb);
+    console.log(cmd);
+    console.time("running_cmd");
+    var callback = function (error, stdout, stderr) {
+        console.timeEnd("running_cmd");
+        cb(error, stdout, stderr);
+    };
+    exec(cmd, callback);
 };
 
 var merge = function (defaults, options) {
@@ -36,8 +41,8 @@ module.exports = function (opts) {
 
     var defaultsOpts = {
         binaryPath: "tesseract",
-        imageDirectory: "./img/",
-        textDirectory: "./txt/",
+        imageDirectory: "./tmp/img/",
+        textDirectory: "./tmp/txt/",
         trainingDataDirectory: "./trainingData/"
     };
 

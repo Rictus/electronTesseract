@@ -101,9 +101,21 @@ body {
 
 .retryButton {
   position: absolute;
+  top: 100px;
+  right: 50px;
+  transform: translate(-50%, -50%);
+  .button;
+}
+
+.launchButton {
+  position: absolute;
   top: 50px;
   right: 50px;
   transform: translate(-50%, -50%);
+  .button;
+}
+
+.button {
   color: #34495e;
   font-weight: bold;
   font-family: @fontFaces;
@@ -111,6 +123,8 @@ body {
   z-index: 200;
   cursor: pointer;
   font-size: 40px;
+  width: 50px;
+  height: 50px;
   .noselect;
   &:hover {
     color: white;
@@ -119,4 +133,5 @@ body {
 
 .noselect {
   user-select: none;
+  -webkit-user-select: none;
 }

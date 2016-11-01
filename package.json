@@ -1,26 +1,24 @@
 {
-  "name": "electron-quick-start",
+  "name": "electronTesseract",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/Rictus/electronTesseract",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Tesseract",
+    "OCR"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Rictus",
   "devDependencies": {
     "electron": "^1.4.1",
     "less": "^2.7.1"
   },
   "dependencies": {
-    "brew": "0.0.8"
+    "brew": "0.0.8",
+    "express": "4.14.0"
   }
 }
