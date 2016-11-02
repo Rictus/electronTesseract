@@ -1,9 +1,10 @@
+var onBrowser = false;
 if (typeof require === "function") {
-    //NodeJS
+    //NodeJS through Electron
     var runner = require('./ImageOCR')();
 } else {
     //Classic HTML
-    console.info("The on-browser feature is not available yet.");
+    onBrowser = true;
 }
 
 var domElements = {
@@ -40,16 +41,16 @@ var domElements = {
         this.container.classList.remove("textFound");
     },
     launch: function () {
+        var that = this;
         if (domElements.input.files.length > 0) {
             var file = domElements.input.files[0];
             domElements.putImage(file.path);
             domElements.setLoading();
             runner.getText(file.path, file.name, function (txt) {
-                this.unsetLoading();
+                that.unsetLoading();
                 domElements.putText(txt);
             });
         } else {
-            // TODO Show error to user
             console.error("No file selected.");
         }
     }
@@ -71,7 +72,11 @@ var initListeners = function () {
     domElements.input.addEventListener('change', function () {
         var file = domElements.input.files[0];
         console.log(file);
-        domElements.putImage(file.path);
+        if (!onBrowser) {
+            domElements.putImage(file.path);
+        } else {
+            // User should submit to send the file to the server
+        }
     });
 };
 
