@@ -16,6 +16,7 @@ var domElements = {
     elementExample: document.createElement('span'),
     retryButton: document.getElementsByClassName('retryButton')[0],
     launchButton: document.getElementsByClassName('launchButton')[0],
+    form: document.getElementsByClassName('imageDrop-form')[0],
     putImage: function (path) {
         this.img.setAttribute('src', path);
         this.container.classList.add("imageSelected");
@@ -58,26 +59,28 @@ var domElements = {
 
 var initListeners = function () {
     if ('draggable' in domElements.elementExample) {
-
+        console.info("The drag and drop feature is not yet available.");
     } else {
         console.info("The drag and drop feature is not supported.");
     }
 
-    domElements.launchButton.addEventListener('click', function () {
-        domElements.launch();
-    });
-    domElements.retryButton.addEventListener('click', function () {
-        domElements.retry();
-    });
-    domElements.input.addEventListener('change', function () {
-        var file = domElements.input.files[0];
-        console.log(file);
-        if (!onBrowser) {
+    if (!onBrowser) {
+        domElements.launchButton.addEventListener('click', function () {
+            domElements.launch();
+        });
+        domElements.retryButton.addEventListener('click', function () {
+            domElements.retry();
+        });
+        domElements.input.addEventListener('change', function () {
+            var file = domElements.input.files[0];
+            console.log(file);
             domElements.putImage(file.path);
-        } else {
-            // User should submit to send the file to the server
-        }
-    });
+        });
+    } else {
+        domElements.input.addEventListener('change', function () {
+            domElements.form.submit();
+        });
+    }
 };
 
 initListeners();

@@ -34,6 +34,15 @@ var merge = function (defaults, options) {
     return defaults;
 };
 
+var moveFileTmp = function (inputPath, outputPath) {
+    if (inputPath === outputPath) {
+        return false;
+    } else {
+        fs.createReadStream(inputPath).pipe(fs.createWriteStream(outputPath));
+        return true;
+    }
+};
+
 module.exports = function (opts) {
     if (typeof opts !== "object") {
         opts = {};
@@ -83,8 +92,8 @@ module.exports = function (opts) {
             var outputTextFile = options.textDirectory + filename;
             outputTextFile = outputTextFile.replace(new RegExp(" ", 'g'), "_");
             var tmpImgPath = options.imageDirectory + filename;
-            fs.createReadStream(filepath).pipe(fs.createWriteStream(tmpImgPath));
-            var cmd = buildCmd(options.binaryPath, tmpImgPath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
+            moveFileTmp(filepath, tmpImgPath);
+            var cmd = buildCmd(options.binaryPath, filepath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
             runCmd(cmd, function callback(error, stdout, stderr) {
                 if (error) {
                     throw error;
