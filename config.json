@@ -1,8 +1,5 @@
 {
-  "tesseractExecutablePath": {
-    "windows": "",
-    "linux": ""
-  },
+  "tesseractTrainingDataPath": "../tesseractTrainingData/",
   "server": {
     "maxFileSize": 1000,
     "maxNumberOfFiles": 1,
@@ -24,7 +21,7 @@
       },
       "wrongMimeType": {
         "code": 406,
-        "text": "Wrong file type, only image allowed."
+        "text": "Wrong file type, only image or pdf allowed."
       },
       "InternalError": {
         "code": 500,

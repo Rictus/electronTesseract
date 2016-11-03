@@ -1,8 +1,9 @@
+var config = require('../config.json');
 var fs = require('fs');
 var exec = require('child_process').exec;
 
-var buildCmd = function (binary, inputFile, outputFile, language, psmValue, trainingDataDirectory) {
-    var cmd = [binary, "\"" + inputFile + "\"", outputFile,
+var buildCmd = function (inputFile, outputFile, language, psmValue, trainingDataDirectory) {
+    var cmd = ["tesseract", "\"" + inputFile + "\"", outputFile,
         " -l " + language,
         " -psm " + psmValue,
         " --tessdata-dir " + trainingDataDirectory];
@@ -49,10 +50,10 @@ module.exports = function (opts) {
     }
 
     var defaultsOpts = {
-        binaryPath: "tesseract",
+        //binaryPath: config.tesseractExecutablePath,
         imageDirectory: "./tmp/img/",
         textDirectory: "./tmp/txt/",
-        trainingDataDirectory: "./trainingData/"
+        trainingDataDirectory: config.tesseractTrainingDataPath
     };
 
     var options = merge(defaultsOpts, opts);
@@ -69,11 +70,13 @@ module.exports = function (opts) {
         fs.mkdir(options.textDirectory)
     }
 
-    try {
-        fs.accessSync(options.binaryPath, fs.F_OK);
-    } catch (e) {
-        throw e;
-    }
+    /* //No longer need to test this
+       try {
+     fs.accessSync(options.binaryPath, fs.F_OK);
+     } catch (e) {
+     throw e;
+     }
+     //*/
 
     try {
         fs.accessSync(options.trainingDataDirectory, fs.F_OK);
@@ -93,7 +96,7 @@ module.exports = function (opts) {
             outputTextFile = outputTextFile.replace(new RegExp(" ", 'g'), "_");
             var tmpImgPath = options.imageDirectory + filename;
             moveFileTmp(filepath, tmpImgPath);
-            var cmd = buildCmd(options.binaryPath, filepath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
+            var cmd = buildCmd(filepath, outputTextFile, 'eng', 3, options.trainingDataDirectory);
             runCmd(cmd, function callback(error, stdout, stderr) {
                 if (error) {
                     throw error;
