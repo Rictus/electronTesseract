@@ -13,13 +13,14 @@ Download https://github.com/tesseract-ocr/tessdata
 Put these files in a directory and add this directory path in config.json
 
 # TODO :
+## Features
 - Region selection
-- Loading animation
+- Face recognition
 - Drag and drop
-- Node js server that listen requests
-- More options
+## UX
+- Loading animation
 - Error handling : show to user
 - Responsive
-- Tesseract installation script
-- Face recognition
+## Misc
 - More supported mime types
+- More testcases
