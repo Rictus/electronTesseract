@@ -1,0 +1,37 @@
+{
+  "tesseractExecutablePath": {
+    "windows": "",
+    "linux": ""
+  },
+  "server": {
+    "maxFileSize": 1000,
+    "maxNumberOfFiles": 1,
+    "tmpDirectoryPath": "./tmp/img/",
+    "supportedMimeTypes": [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/tiff"
+    ],
+    "errors": {
+      "noFileUploaded": {
+        "code": 204,
+        "text": "No file uploaded."
+      },
+      "noTextFound": {
+        "code": 206,
+        "text": "No text found in the given image."
+      },
+      "wrongMimeType": {
+        "code": 406,
+        "text": "Wrong file type, only image allowed."
+      },
+      "InternalError": {
+        "code": 500,
+        "text": "Internal Server Error"
+      }
+    }
+  },
+  "application": {
+  }
+}

@@ -1,3 +1,4 @@
+var config = require('./config.json');
 var http = require('http');
 var express = require('express');
 var fileUpload = require('express-fileupload');
@@ -5,7 +6,11 @@ var app = express(http);
 
 var ocr = require('./src/ImageOCR')();
 
-app.use(fileUpload());
+app.use(fileUpload({
+    fileSize: config.server.maxFileSize,
+    file: config.server.maxNumberOfFiles
+}));
+
 app.use(express.static('public'));
 app.use(express.static('src'));
 
@@ -14,29 +19,53 @@ app.get('/', function (req, res) {
 });
 
 app.post('/imageUpload', function (req, res) {
-    var sampleFile;
+    var userReponseError = function (errorCode) {
+        if (errorCode in config.server.errors) {
+            res.status(config.server.errors[errorCode].code).send(config.server.errors[errorCode].text);
+        } else {
+            console.error("The key '" + errorCode + "' doesn't exist in configuration file.");
+            res.status(config.server.errors["InternalError"].code).send(config.server.errors["InternalError"].text);
+        }
+    };
 
-    if (!req.files) {
-        res.send('No files were uploaded.');
-        return;
-    }
-
-    sampleFile = req.files.image;
-    var destPath = './tmp/img/' + sampleFile.name;
-    if (sampleFile.mimetype.substr(0, "image".length) === "image") {
-        sampleFile.mv(destPath, function (err) {
+    var checkMimeType = function (mimeType, onMimeTypeOK) {
+        if (config.server.supportedMimeTypes.indexOf(mimeType) >= 0) {
+            onMimeTypeOK();
+        } else {
+            userReponseError("wrongMimeType");
+        }
+    };
+    var moveFileToTmp = function (file, onMoveSuccess) {
+        var destinationPath = config.server.tmpDirectoryPath + sampleFile.name;
+        file.mv(destinationPath, function (err) {
             if (err) {
-                res.status(500).send(err);
-            }
-            else {
-                ocr.getText(destPath, sampleFile.name, function (txt) {
-                    res.send(typeof txt === "string" && txt.length > 0 ? txt : "No text found.");
-                });
+                console.error(err);
+                userReponseError("InternalError");
+            } else {
+                onMoveSuccess(destinationPath);
             }
         });
-    } else {
-        res.send('Wrong file type, only image allowed.');
+    };
+
+    var cbOcrResponse = function (txt) {
+        if (typeof txt === "string" && txt.length > 0) {
+            res.status(200).send(txt);
+        } else {
+            userReponseError("noTextFound");
+        }
+    };
+
+    if (typeof req.files === "undefined" || !req.files) {
+        userReponseError("noFileUploaded");
+        return;
     }
+    var sampleFile = req.files.image;
+
+    checkMimeType(sampleFile.mimetype, function () {
+        moveFileToTmp(sampleFile, function (filePath) {
+            ocr.getText(filePath, sampleFile.name, cbOcrResponse);
+        });
+    })
 });
 
 app.listen(8090, function () {
