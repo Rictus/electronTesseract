@@ -48,7 +48,7 @@ app.post('/imageUpload', function (req, res) {
     };
 
     var cbOcrResponse = function (txt) {
-        if (typeof txt === "string" && txt.length > 0) {
+        if (typeof txt === "string" && txt.length > 0 && !(/^\s*$/g.test(txt))) {
             res.status(200).send(txt);
         } else {
             userReponseError("noTextFound");

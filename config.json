@@ -16,8 +16,8 @@
         "text": "No file uploaded."
       },
       "noTextFound": {
-        "code": 206,
-        "text": "No text found in the given image."
+        "code": 306,
+        "text": "No text found."
       },
       "wrongMimeType": {
         "code": 406,

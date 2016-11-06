@@ -4,17 +4,14 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Image character recognition</title>
+    <title>Optical character recognition</title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-<div class="imageDrop-mainContainer">
-    <label class="imageDrop-label center" id="imageDropLabel">
-        <span class="imageDrop-explain">Drag'n'Drop or Click to select a file</span>
-    </label>
-
-    <div id="imageDropPreviews" class="dropzone-previews"></div>
+<div class="imageDrop-mainContainer dropzone" id="imageDropMainContainer">
+    <div class="dz-message">Drag and drop a file here or click here to select</div>
 </div>
+
 <script src="/js/dropzone.js"></script>
 <script src="/renderer.js"></script>
 </body>

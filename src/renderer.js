@@ -59,13 +59,18 @@ var domElements = {
 };
 
 var initDropzone = function () {
-    new Dropzone(domElements.container, {
+    Dropzone.options.imageDropMainContainer = {
         url: "/imageUpload",
         paramName: "image",
-        previewsContainer: "#imageDropPreviews",
-        clickable: "#imageDropLabel",
-        acceptedFiles: "image/*,application/pdf"
-    });
+        acceptedFiles: "image/*,application/pdf",
+        addRemoveLinks: true,
+        success: function (file, servRes) {
+            var pE = file.previewElement;
+            var el = document.createElement("pre");
+            el.innerHTML = "<pre style='color:black;'>" + servRes + "</pre>";
+            pE.appendChild(el);
+        }
+    };
 };
 
 var initListeners = function () {

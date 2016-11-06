@@ -1,8 +1,17 @@
 @choosenFilesColor: #34495e;
 @mainBackgroundColor: #2c3e50;
-@fontFaces : Arial, sans-serif;
+@fontFamily : Arial, sans-serif;
+@import "dropzone.css";
 body {
   background-color: @mainBackgroundColor;
+}
+
+.imageDrop-mainContainer {
+  color: white;
+  font-weight: bold;
+  font-family: @fontFamily;
+  font-size: 1em;
+  text-transform: uppercase;
 }
 
 .imageDrop-mainContainer {
@@ -14,7 +23,7 @@ body {
   bottom: 0;
   background: @mainBackgroundColor;
   box-sizing: border-box;
-  font-family: @fontFaces;
+  font-family: @fontFamily;
   z-index: 200;
   &.imageSelected {
     .imageDrop-label {
@@ -61,7 +70,7 @@ body {
   padding: 15px;
   color: white;
   background-color: #34495e;
-  font-family: @fontFaces;
+  font-family: @fontFamily;
   font-weight: bold;
   transform: translate(0, -50%);
 }
@@ -126,7 +135,7 @@ input[type=file], input[type=submit] {
 .button {
   color: #34495e;
   font-weight: bold;
-  font-family: @fontFaces;
+  font-family: @fontFamily;
   background: transparent;
   z-index: 200;
   cursor: pointer;
