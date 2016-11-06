@@ -1,23 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Image character recognition</title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
 <div class="imageDrop-mainContainer">
-    <form action="/imageUpload" method="POST" class="imageDrop-form" enctype="multipart/form-data">
-        <label class="imageDrop-label center" for="imageDropInput">
-        <span class="imageDrop-explain">
-            Drag'n'Drop an image here<br>
-            Or click to select
-        </span>
-            <input type="file" class="imageDrop-input" name="image" id="imageDropInput"/>
-        </label>
-    </form>
-</div>
-</body>
+    <label class="imageDrop-label center" id="imageDropLabel">
+        <span class="imageDrop-explain">Drag'n'Drop or Click to select a file</span>
+    </label>
 
-<script src="renderer.js"></script>
+    <div id="imageDropPreviews" class="dropzone-previews"></div>
+</div>
+<script src="/js/dropzone.js"></script>
+<script src="/renderer.js"></script>
+</body>
 </html>

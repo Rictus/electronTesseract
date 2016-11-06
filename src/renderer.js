@@ -1,7 +1,7 @@
-var onBrowser = false;
 if (typeof require === "function") {
     //NodeJS through Electron
     var runner = require('./ImageOCR')();
+    var onBrowser = false;
 } else {
     //Classic HTML
     onBrowser = true;
@@ -17,6 +17,7 @@ var domElements = {
     retryButton: document.getElementsByClassName('retryButton')[0],
     launchButton: document.getElementsByClassName('launchButton')[0],
     form: document.getElementsByClassName('imageDrop-form')[0],
+    textExplain: document.getElementsByClassName('imageDrop-explain')[0],
     putImage: function (path) {
         this.img.setAttribute('src', path);
         this.container.classList.add("imageSelected");
@@ -57,11 +58,26 @@ var domElements = {
     }
 };
 
+var initDropzone = function () {
+    new Dropzone(domElements.container, {
+        url: "/imageUpload",
+        paramName: "image",
+        previewsContainer: "#imageDropPreviews",
+        clickable: "#imageDropLabel",
+        acceptedFiles: "image/*,application/pdf"
+    });
+};
+
 var initListeners = function () {
     if ('draggable' in domElements.elementExample) {
-        console.info("The drag and drop feature is not yet available.");
+        if (typeof Dropzone === "object" || typeof Dropzone === "function") {
+            initDropzone();
+            console.info("Drag and drop feature initialized.");
+        } else {
+            console.error("Dropzone library is not loaded.");
+        }
     } else {
-        console.info("The drag and drop feature is not supported.");
+        console.info("The Drag and drop feature is not supported.");
     }
 
     if (!onBrowser) {
@@ -75,10 +91,6 @@ var initListeners = function () {
             var file = domElements.input.files[0];
             console.log(file);
             domElements.putImage(file.path);
-        });
-    } else {
-        domElements.input.addEventListener('change', function () {
-            domElements.form.submit();
         });
     }
 };

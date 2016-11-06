@@ -26,6 +26,10 @@
       "InternalError": {
         "code": 500,
         "text": "Internal Server Error"
+      },
+      "WrongParamName": {
+        "code": 412,
+        "text": "File found but sent with wrong param name. Please use 'image'."
       }
     }
   },

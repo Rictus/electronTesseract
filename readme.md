@@ -16,7 +16,6 @@ Put these files in a directory and add this directory path in config.json
 ## Features
 - Region selection
 - Face recognition
-- Drag and drop
 ## UX
 - Loading animation
 - Error handling : show to user

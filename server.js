@@ -55,12 +55,15 @@ app.post('/imageUpload', function (req, res) {
         }
     };
 
-    if (typeof req.files === "undefined" || !req.files) {
+    var sampleFile;
+    var objFiles = typeof req.files === "object" ? req.files : req.file;
+    if (typeof objFiles !== "object") {
         userReponseError("noFileUploaded");
-        return;
+    } else if (typeof objFiles.image !== "object") {
+        userReponseError("WrongParamName");
+    } else {
+        sampleFile = objFiles.image;
     }
-    var sampleFile = req.files.image;
-
     checkMimeType(sampleFile.mimetype, function () {
         moveFileToTmp(sampleFile, function (filePath) {
             ocr.getText(filePath, sampleFile.name, cbOcrResponse);
@@ -69,5 +72,5 @@ app.post('/imageUpload', function (req, res) {
 });
 
 app.listen(8090, function () {
-    console.log('Listening on port 8090!');
+    console.log('http://localhost:8090');
 });
