@@ -2,7 +2,7 @@
 ## Tesseract
 ### Linux
 ```bash
-sudo apt-get install tesseract
+sudo apt-get install tesseract-ocr
 ```
 ###Windows
 Download http://dylan-leroux.fr/tesseract/tesseract.zip
