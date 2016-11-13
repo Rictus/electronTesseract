@@ -21,7 +21,7 @@
       },
       "wrongMimeType": {
         "code": 406,
-        "text": "Wrong file type, only image or pdf allowed."
+        "text": "Wrong file type, only image allowed."
       },
       "InternalError": {
         "code": 500,

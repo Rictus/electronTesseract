@@ -71,7 +71,7 @@ module.exports = function (opts) {
     }
 
     /* //No longer need to test this
-       try {
+     try {
      fs.accessSync(options.binaryPath, fs.F_OK);
      } catch (e) {
      throw e;
@@ -94,6 +94,7 @@ module.exports = function (opts) {
             // Tesseract only output to a text file
             var outputTextFile = options.textDirectory + filename;
             outputTextFile = outputTextFile.replace(new RegExp(" ", 'g'), "_");
+            // No need to add ".txt" to the text file, Tesseract append it himself.
             var tmpImgPath = options.imageDirectory + filename;
             moveFileTmp(filepath, tmpImgPath);
             var cmd = buildCmd(filepath, outputTextFile, 'eng', 3, options.trainingDataDirectory);

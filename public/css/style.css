@@ -71,7 +71,6 @@ body {
   border: dashed 2px rgba(255, 255, 255, 0.3);
   padding: 30px;
   border-radius: 8px;
-  cursor: pointer;
   transition: top .3s ease, left .3s ease, transform .3s ease;
 }
 .imageDrop-label.center {

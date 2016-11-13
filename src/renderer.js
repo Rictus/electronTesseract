@@ -1,10 +1,6 @@
-if (typeof require === "function") {
-    //NodeJS through Electron
+var onBrowser = typeof require !== "function";
+if (!onBrowser) {
     var runner = require('./ImageOCR')();
-    var onBrowser = false;
-} else {
-    //Classic HTML
-    onBrowser = true;
 }
 
 var domElements = {
@@ -62,7 +58,7 @@ var initDropzone = function () {
     Dropzone.options.imageDropMainContainer = {
         url: "/imageUpload",
         paramName: "image",
-        acceptedFiles: "image/*,application/pdf",
+        acceptedFiles: "image/*",
         addRemoveLinks: true,
         success: function (file, servRes) {
             var pE = file.previewElement;
@@ -74,15 +70,11 @@ var initDropzone = function () {
 };
 
 var initListeners = function () {
-    if ('draggable' in domElements.elementExample) {
-        if (typeof Dropzone === "object" || typeof Dropzone === "function") {
-            initDropzone();
-            console.info("Drag and drop feature initialized.");
-        } else {
-            console.error("Dropzone library is not loaded.");
-        }
+    if (typeof Dropzone === "object" || typeof Dropzone === "function") {
+        initDropzone();
+        console.info("Drag and drop feature initialized.");
     } else {
-        console.info("The Drag and drop feature is not supported.");
+        console.error("Dropzone library is not loaded.");
     }
 
     if (!onBrowser) {
